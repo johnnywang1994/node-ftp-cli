@@ -1,0 +1,35 @@
+{
+  "name": "node-ftp-cli",
+  "version": "1.0.0",
+  "description": "ftp command line tool, based on npm 'ftp' package",
+  "author": "johnnywang",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "bin": {
+    "node-ftp": "src/cli.js"
+  },
+  "scripts": {
+    "dev": "node src/cli.js"
+  },
+  "keywords": [
+    "npm",
+    "ftp",
+    "ftp-cli",
+    "node-ftp",
+    "command"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnnywang1994/node-ftp-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/johnnywang1994/node-ftp-cli/issues"
+  },
+  "homepage": "https://github.com/johnnywang1994/node-ftp-cli#readme",
+  "license": "ISC",
+  "dependencies": {
+    "ftp": "^0.3.10",
+    "minimist": "^1.2.5",
+    "ora": "5.4.1"
+  }
+}
