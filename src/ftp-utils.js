@@ -184,6 +184,23 @@ async function putdir(client, dirpath, targetDirPath = '/') {
   }
 }
 
+async function appenddir(client, dirpath, targetDirPath = '/') {
+  // get local filepaths
+  const localFilepaths = readFilesFromDir(dirpath);
+
+  // loop local files
+  for (let filepath of localFilepaths) {
+    const dirname = path.dirname(filepath);
+    const remoteDirname = path.resolve(targetDirPath, dirname);
+    // check remote folder exist
+    const { err } = await cwd(client, remoteDirname);
+    if (err) {
+      await mkdir(client, remoteDirname);
+    }
+    await appendFile(client, filepath, remoteDirname);
+  }
+}
+
 function initFtp(options) {
   const spinner = ora('connecting...\n');
 
@@ -221,5 +238,6 @@ module.exports = {
   rmdir,
   getdir,
   putdir,
+  appenddir,
   initFtp,
 };

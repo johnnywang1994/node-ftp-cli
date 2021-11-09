@@ -1,16 +1,19 @@
 #!/usr/bin/env node
 const path = require('path');
 const minimist = require('minimist');
-const { listFiles, putFile, appendFile, getFile, removeFile, renamePath, mkdir, rmdir, getdir, initFtp, putdir } = require('./ftp-utils');
+const { listFiles, putFile, appendFile, getFile, removeFile, renamePath, mkdir, rmdir, getdir, initFtp, putdir, appenddir } = require('./ftp-utils');
 
 // fetch argv
 const argv = minimist(process.argv.slice(2));
 
 // fetch user config
-const ftpConfig = require(path.resolve(
-  process.cwd(),
-  argv.config || 'ftp.config.js'
-));
+let ftpConfig;
+if (!argv.help && !argv.version) {
+  ftpConfig = require(path.resolve(
+    process.cwd(),
+    argv.config || 'ftp.config.js'
+  ));
+}
 
 async function onClientReady(client, spinner) {
   // list files in folder
@@ -62,8 +65,13 @@ async function onClientReady(client, spinner) {
   // upload a folder
   // --putdir [remotepath] -t [localpath]
   } else if (argv.putdir) {
-    spinner.text = `Uploading folder ${argv.putdir}...\n`;
+    spinner.text = `Uploading folder ${argv.putdir} with put...\n`;
     await putdir(client, argv.putdir, argv.t);
+  // upload a folder
+  // --appenddir [remotepath] -t [localpath]
+  } else if (argv.appenddir) {
+    spinner.text = `Uploading folder ${argv.appenddir} with append...\n`;
+    await appenddir(client, argv.appenddir, argv.t);
   }
 }
 
@@ -89,6 +97,7 @@ if (argv.help) {
             --rmdir [remotefolder]
             --getdir [remotefolder] -o [outputpath]
             --putdir [localfolder] -t [remotefolder]
+            --appenddir [localfolder] -t [remotefolder]
             --help
             --version
     Examples
@@ -96,6 +105,8 @@ if (argv.help) {
       $ node-ftp --get /htdocs/index.html -o ./download
       $ node-ftp --put index.html -t /htdocs
   `);
+} else if (argv.version) {
+  console.log('v' + require('../package.json').version);
 } else {
   initFtp(ftpOptions);
 }

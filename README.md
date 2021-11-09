@@ -120,10 +120,55 @@ $ node-ftp --putfir dist -t /htdocs
 ```
 
 ### --appenddir [localfolder] -t [remotefolder]
-now working...
+upload target folder to ftp server, if target file already exist, will not overwrite the existing file.
 
 
 ## Script Usage
-now working...
+if you need more custom usage, you can easily require the `initFtp` function for custom usage.
 
-### Last Updated by johnnywang in 2021/11/07
+```js
+// find below usable methods
+const { initFtp, listFiles } = require('node-ftp-cli');
+
+const ftpOptions = {
+  config: {
+    host: 'aaaa.net',
+    password: '123',
+    // ...
+  },
+  ready: onFtpReady,
+};
+
+// ready function should be a promise
+async function onFtpReady(client) {
+  const { files } = await listFiles(client, '/');
+  console.dir(files);
+  // will auto close client once this ready promise resolved
+}
+
+// init connect
+initFtp(ftpOptions);
+```
+
+Usable functions:
+
+```js
+// exports of node-ftp-cli
+module.exports = {
+  cwd,
+  listFiles,
+  getFile,
+  putFile,
+  appendFile,
+  removeFile,
+  renamePath,
+  mkdir,
+  rmdir,
+  getdir,
+  putdir,
+  appenddir,
+  initFtp,
+}
+```
+
+### Last Updated by johnnywang in 2021/11/08
