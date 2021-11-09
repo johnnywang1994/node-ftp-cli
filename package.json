@@ -28,6 +28,7 @@
   "homepage": "https://github.com/johnnywang1994/node-ftp-cli#readme",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^4.1.2",
     "ftp": "^0.3.10",
     "minimist": "^1.2.5",
     "ora": "5.4.1"
