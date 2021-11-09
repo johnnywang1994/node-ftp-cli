@@ -73,7 +73,7 @@ async function appendFile(client, currentFile, dirpath) {
   const stream = fs.createReadStream(currentFile);
   await cwd(client, dirpath);
   return new Promise((resolve) => {
-    client.appendFile(stream, fileName, (err) => {
+    client.append(stream, fileName, (err) => {
       resolve({ err });
     });
   });
