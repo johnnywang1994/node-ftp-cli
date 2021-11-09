@@ -1,6 +1,6 @@
 {
   "name": "node-ftp-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ftp command line tool, based on npm 'ftp' package",
   "author": "johnnywang",
   "main": "src/index.js",
