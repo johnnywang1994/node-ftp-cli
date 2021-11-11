@@ -13,6 +13,7 @@ if (!argv.help && !argv.version) {
     process.cwd(),
     argv.config || 'ftp.config.js'
   ));
+  console.log(ftpConfig.excludes);
 }
 
 async function onClientReady(client, spinner) {
@@ -31,7 +32,6 @@ async function onClientReady(client, spinner) {
   // --put/--append [localpath] -t [remotepath]
   } else if (argv.put || argv.append) {
     spinner.text = `Uploading file ${argv.put || argv.append} to ${argv.t}...\n`;
-    spinner.stop();
     if (argv.put) {
       await putFile(client, argv.put, argv.t);
     } else if (argv.append) {
@@ -63,15 +63,20 @@ async function onClientReady(client, spinner) {
     spinner.text = `Downloading folder ${argv.getdir}...\n`;
     await getdir(client, argv.getdir, argv.o);
   // upload a folder
-  // --putdir [remotepath] -t [localpath]
-  } else if (argv.putdir) {
-    spinner.text = `Uploading folder ${argv.putdir} with put...\n`;
-    await putdir(client, argv.putdir, argv.t);
-  // upload a folder
-  // --appenddir [remotepath] -t [localpath]
-  } else if (argv.appenddir) {
-    spinner.text = `Uploading folder ${argv.appenddir} with append...\n`;
-    await appenddir(client, argv.appenddir, argv.t);
+  // --putdir/--appenddir [remotepath] -t [localpath] [--unzip]
+  } else if (argv.putdir || argv.appenddir) {
+    spinner.text = `Uploading folder ${argv.putdir || argv.appenddir} with put, unzip: ${argv.unzip || false}...\n`;
+    const options = {
+      dirpath: argv.putdir || argv.appenddir,
+      targetDirPath: argv.t,
+      unzip: argv.unzip,
+      excludes: ftpConfig.excludes,
+    };
+    if (argv.putdir) {
+      await putdir(client, options);
+    } else if (argv.appenddir) {
+      await appenddir(client, options);
+    }
   }
 }
 

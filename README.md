@@ -112,14 +112,33 @@ download target folder
 $ node-ftp --getdir /htdocs -o ./myftp
 ```
 
-### --putdir [localfolder] -t [remotefolder]
+### --putdir [localfolder] -t [remotefolder] [--unzip]
 upload target folder to ftp server, if target file already exist, will overwrite the existing file, if target folder existed, will only append new files to that folder
 
+1. ./dist/index.html => /htdocs/dist/index.html
 ```bash
 $ node-ftp --putfir dist -t /htdocs
 ```
 
-### --appenddir [localfolder] -t [remotefolder]
+with `--unzip`, we can extract files from specific folder to the target folder
+
+2. ./dist/index.html => /htdocs/index.html
+```bash
+$ node-ftp --putdir dist -t /htdocs --unzip
+```
+
+> for putdir, appenddir methods, we can set the `excludes` as array of string/regexp in options. value will be directly use in `match` method to exclude files or folder.
+
+```js
+module.exports = {
+  host: '',
+  password: '',
+  // ...
+  excludes: [/node_modules/],
+}
+```
+
+### --appenddir [localfolder] -t [remotefolder] [--unzip]
 upload target folder to ftp server, if target file already exist, will not overwrite the existing file.
 
 

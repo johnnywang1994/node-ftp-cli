@@ -1,4 +1,5 @@
 .gitignore
 yarn.lock
 package-lock.json
-/test/
+/test/*
+ftp.config.js

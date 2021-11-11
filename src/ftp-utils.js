@@ -167,14 +167,23 @@ async function getdir(client, dirpath, outputDirPath) {
   }
 }
 
-async function putdir(client, dirpath, targetDirPath = '/') {
+async function putdir(client, options) {
+  const { dirpath, targetDirPath, unzip, excludes } = Object.assign({
+    targetDirPath: '/',
+    unzip: false,
+    excludes: [],
+  }, options);
   // get local filepaths
-  const localFilepaths = readFilesFromDir(dirpath);
+  const localFilepaths = readFilesFromDir(dirpath, excludes);
 
   // loop local files
   for (let filepath of localFilepaths) {
-    const dirname = path.dirname(filepath);
-    const remoteDirname = path.resolve(targetDirPath, dirname);
+    let dirname = path.dirname(filepath);
+    // unzip files
+    if (unzip === true) {
+      dirname = dirname.replace(dirpath, '');
+    }
+    const remoteDirname = path.join(targetDirPath, dirname);
     // check remote folder exist
     const { err } = await cwd(client, remoteDirname);
     if (err) {
@@ -184,14 +193,23 @@ async function putdir(client, dirpath, targetDirPath = '/') {
   }
 }
 
-async function appenddir(client, dirpath, targetDirPath = '/') {
+async function appenddir(client, options) {
+  const { dirpath, targetDirPath, unzip, excludes } = Object.assign({
+    targetDirPath: '/',
+    unzip: false,
+    excludes: [],
+  }, options);
   // get local filepaths
-  const localFilepaths = readFilesFromDir(dirpath);
+  const localFilepaths = readFilesFromDir(dirpath, excludes);
 
   // loop local files
   for (let filepath of localFilepaths) {
-    const dirname = path.dirname(filepath);
-    const remoteDirname = path.resolve(targetDirPath, dirname);
+    let dirname = path.dirname(filepath);
+    // unzip files
+    if (unzip === true) {
+      dirname = dirname.replace(dirpath, '');
+    }
+    const remoteDirname = path.join(targetDirPath, dirname);
     // check remote folder exist
     const { err } = await cwd(client, remoteDirname);
     if (err) {

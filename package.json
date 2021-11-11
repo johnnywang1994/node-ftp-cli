@@ -9,7 +9,7 @@
     "node-ftp": "src/cli.js"
   },
   "scripts": {
-    "dev": "node src/cli.js"
+    "dev": "node src/cli.js --config test/ftp.config.js"
   },
   "keywords": [
     "npm",
